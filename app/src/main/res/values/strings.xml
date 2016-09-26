@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyYelpHelperApp</string>
+    <string name="grant_type" translatable="false">client_credentials</string>
+    <string name="token_failure">Failure retrieving Yelp Token</string>
+    <string name="love_yelp">I love Yelp!</string>
+    <string name="customer_photo">Customer Review Photo</string>
+
+</resources>
