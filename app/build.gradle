@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "com.example.j2emanue.myyelphelperapp"
         minSdkVersion 21
-        targetSdkVersion 24
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         buildConfigField "String", "SERVER_URL", '"https://api.yelp.com/"'
