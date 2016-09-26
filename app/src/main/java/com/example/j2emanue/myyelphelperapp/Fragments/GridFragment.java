@@ -1,23 +1,23 @@
 package com.example.j2emanue.myyelphelperapp.Fragments;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ProgressBar;
 
 import com.example.j2emanue.myyelphelperapp.Base.YelpBaseFragment;
 import com.example.j2emanue.myyelphelperapp.Constants.Constants;
-import com.example.j2emanue.myyelphelperapp.CustomGridViewAdapter;
 import com.example.j2emanue.myyelphelperapp.Events.TokenRecievedEvent;
+import com.example.j2emanue.myyelphelperapp.GridAdapter;
 import com.example.j2emanue.myyelphelperapp.Model.Business.Business;
 import com.example.j2emanue.myyelphelperapp.Model.Business.Businesses;
 import com.example.j2emanue.myyelphelperapp.Model.Reviews.Reviews;
@@ -56,11 +56,16 @@ public class GridFragment extends YelpBaseFragment {
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbar;
 
-    @BindView(R.id.grid)
-    GridView mGridView;
+    //@BindView(R.id.grid)
+    //GridView mGridView;
 
-@BindView(R.id.fab)
-FloatingActionButton fab;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
+    @BindView((R.id.recycler_view))
+    RecyclerView recyclerView;
+
+    private GridAdapter mAdapter;
 
     @Override
     public void onDestroy() {
@@ -77,10 +82,6 @@ FloatingActionButton fab;
 
         initFabButton();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //http://stackoverflow.com/questions/30696611/design-lib-coordinatorlayout-collapsingtoolbarlayout-with-gridview-listview
-            ViewCompat.setNestedScrollingEnabled(mGridView, true);
-        }
         return view;
     }
 
@@ -88,7 +89,7 @@ FloatingActionButton fab;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((CustomGridViewAdapter)mGridView.getAdapter()).getFilter().filter("4");
+                ((GridAdapter) recyclerView.getAdapter()).getFilter().filter("4");
             }
         });
     }
@@ -137,7 +138,7 @@ FloatingActionButton fab;
                                     businessesWithReviews.add(business);
                                     return businessesWithReviews;
                                 }
-                    }).subscribeOn(Schedulers.newThread())
+                            }).subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Observer<List<Business>>() {
                                 @Override
@@ -172,9 +173,12 @@ FloatingActionButton fab;
     private void updateUI(final List<Business> businesses) {
 
         mProgressBar.setVisibility(View.GONE);
-        mGridView.setVisibility(View.VISIBLE);
-        CustomGridViewAdapter adapter = new CustomGridViewAdapter(getActivity(), businesses);
-        mGridView.setAdapter(adapter);
+        mAdapter = new GridAdapter(businesses);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(),2);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
     }
 
 }

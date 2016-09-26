@@ -1,9 +1,12 @@
 package com.example.j2emanue.myyelphelperapp.Model.Reviews;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Review {
+public class Review implements Parcelable {
 
     @SerializedName("url")
     @Expose
@@ -111,4 +114,40 @@ public class Review {
         this.timeCreated = timeCreated;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.url);
+        dest.writeParcelable(this.user, flags);
+        dest.writeValue(this.rating);
+        dest.writeString(this.text);
+        dest.writeString(this.timeCreated);
+    }
+
+    public Review() {
+    }
+
+    protected Review(Parcel in) {
+        this.url = in.readString();
+        this.user = in.readParcelable(User.class.getClassLoader());
+        this.rating = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.text = in.readString();
+        this.timeCreated = in.readString();
+    }
+
+    public static final Parcelable.Creator<Review> CREATOR = new Parcelable.Creator<Review>() {
+        @Override
+        public Review createFromParcel(Parcel source) {
+            return new Review(source);
+        }
+
+        @Override
+        public Review[] newArray(int size) {
+            return new Review[size];
+        }
+    };
 }

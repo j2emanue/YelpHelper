@@ -1,11 +1,10 @@
 package com.example.j2emanue.myyelphelperapp;
 
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import com.example.j2emanue.myyelphelperapp.Constants.ConstantsFragments;
 import com.example.j2emanue.myyelphelperapp.Events.DetailsFragmentEvent;
 import com.example.j2emanue.myyelphelperapp.Model.Business.Business;
-import com.example.j2emanue.myyelphelperapp.Model.Reviews.Review;
 import com.example.j2emanue.myyelphelperapp.Utilities.SquareUtils;
 import com.squareup.picasso.Picasso;
 
@@ -22,77 +20,70 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by j2emanue on 9/24/16.
+ * Created by j2emanue on 9/26/16.
  */
 
-public class CustomGridViewAdapter extends BaseAdapter implements Filterable {
-    private Context mContext;
-    private  List<Business> businesses;
+public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder> implements Filterable {
+
     private RatingsFilter mRatingsfilter;
-    LayoutInflater inflater;
 
-    public CustomGridViewAdapter(Context c, List<Business> businesses) {
-        mContext = c;
+    private List<Business> businesses;
+
+    public GridAdapter(List<Business> businesses) {
+
         this.businesses = businesses;
-
-        inflater = (LayoutInflater) mContext
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
-    public int getCount() {
-        return businesses.size();
+    public GridAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.gridview_custom_layout, parent, false);
+
+        return new MyViewHolder(itemView);
     }
 
     @Override
-    public Object getItem(int p) {
-        return null;
-    }
+    public void onBindViewHolder(GridAdapter.MyViewHolder holder, int position) {
 
-    @Override
-    public long getItemId(int p) {
-        return 0;
-    }
+        Business business = businesses.get(position);
+        holder.review.setText(business.getReviews().get(0).getText());
 
-    @Override
-    public View getView(int pos, View convertView, ViewGroup parent) {
-        View grid;
+        holder.iv.setTag(position);
+        String url = businesses.get(position).getImageUrl();
 
-
-        if (convertView == null) {
-            grid = inflater.inflate(R.layout.gridview_custom_layout, null);
-        } else {
-            grid = (View) convertView;
-
-        }
-
-        String url = businesses.get(pos).getImageUrl();
-        Review review = businesses.get(pos).getReviews().get(0);
-
-        TextView textView = (TextView) grid.findViewById(R.id.gridview_text);
-        textView.setText(review.getText());
-
-        ImageView imageView = (ImageView) grid.findViewById(R.id.gridview_image);
-
-        imageView.setOnClickListener(new View.OnClickListener() {
+        holder.iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 postTransitionToDetailFragmentEvent(view);
             }
         });
 
-        imageView.setTag(pos);
-
         if (!TextUtils.isEmpty(url))
-            Picasso.with(mContext)
+            Picasso.with(holder.iv.getContext())
                     .load(url)
                     .placeholder(R.mipmap.ic_launcher)
                     .error(android.R.drawable.stat_notify_error)
                     .fit()
                     .centerCrop()
-                    .into(imageView);
+                    .into(holder.iv);
 
-        return grid;
+    }
+
+    @Override
+    public int getItemCount() {
+        return businesses.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView review;
+        public ImageView iv;
+
+
+        public MyViewHolder(View view) {
+            super(view);
+            review = (TextView) view.findViewById(R.id.gridview_text);
+            iv = (ImageView) view.findViewById(R.id.gridview_image);
+        }
     }
 
     private void postTransitionToDetailFragmentEvent(View view) {
@@ -143,5 +134,4 @@ public class CustomGridViewAdapter extends BaseAdapter implements Filterable {
             notifyDataSetChanged();
         }
     }
-
 }
