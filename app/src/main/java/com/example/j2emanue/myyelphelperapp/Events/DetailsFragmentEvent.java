@@ -13,22 +13,33 @@ import java.util.List;
 
 public class DetailsFragmentEvent extends BaseEvent {
 
-    private View rootView;
 
-
+    View view;
     private List<Business>businesses;
 
-    public DetailsFragmentEvent(View rootView, List<Business> businesses) {
+    int position;
+
+    public DetailsFragmentEvent(View view, List<Business> businesses,int position) {
         this.businesses = businesses;
-        this.rootView = rootView;
+        this.view = view;
+        this.position = position;
     }
 
     public View getRootView() {
-        return rootView;
+        return view;
     }
 
     public void setRootView(View rootView) {
-        this.rootView = rootView;
+        this.view = view;
+    }
+
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
 

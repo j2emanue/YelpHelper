@@ -16,14 +16,17 @@ import android.widget.ProgressBar;
 
 import com.example.j2emanue.myyelphelperapp.Base.YelpBaseFragment;
 import com.example.j2emanue.myyelphelperapp.Constants.Constants;
+import com.example.j2emanue.myyelphelperapp.Events.DetailsFragmentEvent;
 import com.example.j2emanue.myyelphelperapp.Events.TokenRecievedEvent;
 import com.example.j2emanue.myyelphelperapp.GridAdapter;
 import com.example.j2emanue.myyelphelperapp.Model.Business.Business;
 import com.example.j2emanue.myyelphelperapp.Model.Business.Businesses;
 import com.example.j2emanue.myyelphelperapp.Model.Reviews.Reviews;
 import com.example.j2emanue.myyelphelperapp.R;
+import com.example.j2emanue.myyelphelperapp.RecyclerItemClickListener;
 import com.example.j2emanue.myyelphelperapp.Services.ServiceGenerator;
 import com.example.j2emanue.myyelphelperapp.Services.YelpRestaurantService;
+import com.example.j2emanue.myyelphelperapp.Utilities.SquareUtils;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -178,6 +181,16 @@ public class GridFragment extends YelpBaseFragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        SquareUtils.getBusInstance().post(new DetailsFragmentEvent(view, businesses,position));
+
+                    }
+                }
+                ));
+
         mAdapter.notifyDataSetChanged();
     }
 

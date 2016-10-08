@@ -11,9 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.j2emanue.myyelphelperapp.Constants.ConstantsFragments;
-import com.example.j2emanue.myyelphelperapp.Events.DetailsFragmentEvent;
 import com.example.j2emanue.myyelphelperapp.Model.Business.Business;
-import com.example.j2emanue.myyelphelperapp.Utilities.SquareUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -48,15 +46,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder> 
         Business business = businesses.get(position);
         holder.review.setText(business.getReviews().get(0).getText());
 
-        holder.iv.setTag(position);
+        holder.iv.setTransitionName(ConstantsFragments.SHARED_ELEMENT_TRANSITION_NAME);
         String url = businesses.get(position).getImageUrl();
-
-        holder.iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                postTransitionToDetailFragmentEvent(view);
-            }
-        });
 
         if (!TextUtils.isEmpty(url))
             Picasso.with(holder.iv.getContext())
@@ -74,7 +65,9 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder> 
         return businesses.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+
+    public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView review;
         public ImageView iv;
 
@@ -83,15 +76,10 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder> 
             super(view);
             review = (TextView) view.findViewById(R.id.gridview_text);
             iv = (ImageView) view.findViewById(R.id.gridview_image);
+
         }
     }
 
-    private void postTransitionToDetailFragmentEvent(View view) {
-        ImageView iv = (ImageView) view;
-        iv.setTransitionName(ConstantsFragments.SHARED_ELEMENT_TRANSITION_NAME);
-        SquareUtils.getBusInstance().post(new DetailsFragmentEvent(view, businesses));
-
-    }
 
     @Override
     public Filter getFilter() {

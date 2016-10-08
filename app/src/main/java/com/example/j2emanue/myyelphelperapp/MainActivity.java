@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.example.j2emanue.myyelphelperapp.Base.YelpBaseActivity;
@@ -65,7 +66,8 @@ public class MainActivity extends YelpBaseActivity {
 
         Fragment gridFragment = getSupportFragmentManager().findFragmentByTag(ConstantsFragments.TAG_GRID_FRAGMENT);
         Fragment fragmentTarget = new DetailsFragment();
-        ImageView thumbnail = (ImageView) event.getRootView();
+            View clickedView =event.getRootView();
+        ImageView thumbnail = (ImageView) clickedView.findViewById(R.id.gridview_image);
         thumbnail.setTransitionName(ConstantsFragments.SHARED_ELEMENT_TRANSITION_NAME);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -85,7 +87,7 @@ public class MainActivity extends YelpBaseActivity {
 
 
             Bundle bundle = new Bundle();
-            int myMessage = (int) thumbnail.getTag();
+            int myMessage = event.getPosition();
             bundle.putInt(ConstantsFragments.POSITION, myMessage);
             bundle.putParcelableArrayList("model", (ArrayList<Business>) event.getBusinesses());
 
