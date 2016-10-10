@@ -17,14 +17,11 @@ import com.example.j2emanue.myyelphelperapp.Events.DetailsFragmentEvent;
 import com.example.j2emanue.myyelphelperapp.Events.TokenRecievedEvent;
 import com.example.j2emanue.myyelphelperapp.Fragments.DetailsFragment;
 import com.example.j2emanue.myyelphelperapp.Fragments.GridFragment;
-import com.example.j2emanue.myyelphelperapp.Model.Business.Business;
 import com.example.j2emanue.myyelphelperapp.Model.TokenInfo;
 import com.example.j2emanue.myyelphelperapp.Services.ServiceGenerator;
 import com.example.j2emanue.myyelphelperapp.Services.YelpTokenService;
 import com.example.j2emanue.myyelphelperapp.Utilities.SquareUtils;
 import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -89,8 +86,6 @@ public class MainActivity extends YelpBaseActivity {
             Bundle bundle = new Bundle();
             int myMessage = event.getPosition();
             bundle.putInt(ConstantsFragments.POSITION, myMessage);
-            bundle.putParcelableArrayList("model", (ArrayList<Business>) event.getBusinesses());
-
             fragmentTarget.setArguments(bundle);
 
             // Add second fragment by replacing first

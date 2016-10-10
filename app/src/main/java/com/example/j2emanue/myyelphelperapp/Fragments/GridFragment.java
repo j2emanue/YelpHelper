@@ -20,7 +20,7 @@ import com.example.j2emanue.myyelphelperapp.Events.DetailsFragmentEvent;
 import com.example.j2emanue.myyelphelperapp.Events.TokenRecievedEvent;
 import com.example.j2emanue.myyelphelperapp.GridAdapter;
 import com.example.j2emanue.myyelphelperapp.Model.Business.Business;
-import com.example.j2emanue.myyelphelperapp.Model.Business.Businesses;
+import com.example.j2emanue.myyelphelperapp.Model.Business.BusinessesModel;
 import com.example.j2emanue.myyelphelperapp.Model.Reviews.Reviews;
 import com.example.j2emanue.myyelphelperapp.R;
 import com.example.j2emanue.myyelphelperapp.RecyclerItemClickListener;
@@ -113,11 +113,11 @@ public class GridFragment extends YelpBaseFragment {
             final YelpRestaurantService service = ServiceGenerator.createService(YelpRestaurantService.class, event.getToken());
 
             //randomly using ethiopian restaurants at these coordinates.
-            Call<Businesses> call = service.getBusinesses("Ethiopian", "37.786882", "-122.399972");
+            Call<BusinessesModel> call = service.getBusinesses("Ethiopian", "37.786882", "-122.399972");
 
-            call.enqueue(new Callback<Businesses>() {
+            call.enqueue(new Callback<BusinessesModel>() {
                 @Override
-                public void onResponse(Call<Businesses> call, Response<Businesses> response) {
+                public void onResponse(Call<BusinessesModel> call, Response<BusinessesModel> response) {
                     final List<Business> businessesList = response.body().getBusinesses();
                     final ArrayList<Business> businessesWithReviews = new ArrayList<Business>();
 
@@ -147,7 +147,8 @@ public class GridFragment extends YelpBaseFragment {
                                 @Override
                                 public void onCompleted() {
                                     Log.d(TAG, businessesWithReviews.toString());
-                                    updateUI(businessesWithReviews);
+                                    BusinessesModel.getInstance().setBusinesses(businessesWithReviews);
+                                    updateUI();
                                 }
 
                                 ;
@@ -165,7 +166,7 @@ public class GridFragment extends YelpBaseFragment {
                 }
 
                 @Override
-                public void onFailure(Call<Businesses> call, Throwable t) {
+                public void onFailure(Call<BusinessesModel> call, Throwable t) {
                     Log.d(TAG, t.getMessage());
                 }
             });
@@ -173,10 +174,10 @@ public class GridFragment extends YelpBaseFragment {
         }
     }
 
-    private void updateUI(final List<Business> businesses) {
+    private void updateUI() {
 
         mProgressBar.setVisibility(View.GONE);
-        mAdapter = new GridAdapter(businesses);
+        mAdapter = new GridAdapter(BusinessesModel.getInstance().getBusinesses());
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(),2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -185,7 +186,7 @@ public class GridFragment extends YelpBaseFragment {
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        SquareUtils.getBusInstance().post(new DetailsFragmentEvent(view, businesses,position));
+                        SquareUtils.getBusInstance().post(new DetailsFragmentEvent(view,position));
 
                     }
                 }

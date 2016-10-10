@@ -1,6 +1,6 @@
 package com.example.j2emanue.myyelphelperapp.Services;
 
-import com.example.j2emanue.myyelphelperapp.Model.Business.Businesses;
+import com.example.j2emanue.myyelphelperapp.Model.Business.BusinessesModel;
 import com.example.j2emanue.myyelphelperapp.Model.Reviews.Reviews;
 
 import retrofit2.Call;
@@ -17,7 +17,7 @@ public interface YelpRestaurantService {
 
 
     @GET("v3/businesses/search")
-    Call<Businesses> getBusinesses(
+    Call<BusinessesModel> getBusinesses(
             @Query("term") String term,
             @Query("latitude") String latitude,
             @Query("longitude") String longitude);

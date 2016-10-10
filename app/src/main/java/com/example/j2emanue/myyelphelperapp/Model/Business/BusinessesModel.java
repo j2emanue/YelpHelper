@@ -9,7 +9,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Businesses implements Parcelable {
+public class BusinessesModel implements Parcelable {
+
+    private static final BusinessesModel INSTANCE = new BusinessesModel();
 
     @SerializedName("businesses")
     @Expose
@@ -17,6 +19,16 @@ public class Businesses implements Parcelable {
     @SerializedName("total")
     @Expose
     private Integer total;
+
+
+
+    private BusinessesModel(){}//lock the constructor of our model class
+
+
+
+    public static BusinessesModel getInstance() {
+        return BusinessesModel.INSTANCE;
+    }
 
     /**
      *
@@ -55,7 +67,7 @@ public class Businesses implements Parcelable {
     }
 
 
-    protected Businesses(Parcel in) {
+    protected BusinessesModel(Parcel in) {
         if (in.readByte() == 0x01) {
             businesses = new ArrayList<Business>();
             in.readList(businesses, Business.class.getClassLoader());
@@ -87,15 +99,15 @@ public class Businesses implements Parcelable {
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Businesses> CREATOR = new Parcelable.Creator<Businesses>() {
+    public static final Parcelable.Creator<BusinessesModel> CREATOR = new Parcelable.Creator<BusinessesModel>() {
         @Override
-        public Businesses createFromParcel(Parcel in) {
-            return new Businesses(in);
+        public BusinessesModel createFromParcel(Parcel in) {
+            return new BusinessesModel(in);
         }
 
         @Override
-        public Businesses[] newArray(int size) {
-            return new Businesses[size];
+        public BusinessesModel[] newArray(int size) {
+            return new BusinessesModel[size];
         }
     };
 }

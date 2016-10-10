@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.j2emanue.myyelphelperapp.Base.YelpBaseFragment;
 import com.example.j2emanue.myyelphelperapp.Constants.ConstantsFragments;
 import com.example.j2emanue.myyelphelperapp.Model.Business.Business;
+import com.example.j2emanue.myyelphelperapp.Model.Business.BusinessesModel;
 import com.example.j2emanue.myyelphelperapp.Model.Reviews.Review;
 import com.example.j2emanue.myyelphelperapp.Model.Reviews.User;
 import com.example.j2emanue.myyelphelperapp.R;
@@ -50,7 +51,7 @@ public class DetailsFragment extends YelpBaseFragment {
 
         Bundle bundle = this.getArguments();
         mPosition = bundle.getInt(ConstantsFragments.POSITION);
-        mModel = bundle.getParcelableArrayList("model");
+        mModel = BusinessesModel.getInstance().getBusinesses();
         mUrl = mModel.get(mPosition).getImageUrl();
         mLocation = mModel.get(mPosition).getLocation().getCity();
         mPhone = mModel.get(mPosition).getPhone();
