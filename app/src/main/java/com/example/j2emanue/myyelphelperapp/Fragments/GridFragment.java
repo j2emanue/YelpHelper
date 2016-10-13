@@ -40,7 +40,7 @@ public class GridFragment extends YelpBaseFragment {
     @BindView((R.id.recycler_view))
     RecyclerView recyclerView;
 
-    private GridAdapter mAdapter;
+    public GridAdapter mAdapter;
 
     @Override
     public void onDestroy() {
@@ -55,7 +55,8 @@ public class GridFragment extends YelpBaseFragment {
 
         ButterKnife.bind(this, view);
 
-        updateUI();
+
+     //   updateUI();
 
         return view;
     }
@@ -71,6 +72,7 @@ public class GridFragment extends YelpBaseFragment {
 
     private void initRecyclerView() {
         mAdapter = new GridAdapter(BusinessesModel.getInstance().getBusinesses());
+
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(),2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -87,13 +89,9 @@ public class GridFragment extends YelpBaseFragment {
     }
 
 
-
-    private void updateUI() {
-
-        initFabButton();
+    public void updateUI() {
         initRecyclerView();
-
-        mAdapter.notifyDataSetChanged();
+        initFabButton();
     }
 
 

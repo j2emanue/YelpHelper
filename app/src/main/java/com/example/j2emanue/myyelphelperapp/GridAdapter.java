@@ -25,7 +25,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.MyViewHolder> 
 
     private RatingsFilter mRatingsfilter;
 
-    private List<Business> businesses;
+    public List<Business> businesses;
 
     public GridAdapter(List<Business> businesses) {
 

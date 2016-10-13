@@ -57,6 +57,8 @@ public class MainActivity extends YelpBaseActivity {
 
     SecurePreferences mPrefs;
 
+    GridFragment gridFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,16 +67,27 @@ public class MainActivity extends YelpBaseActivity {
 
         mPrefs = new SecurePreferences(this, "my-preferences", "MytopSecretKey", true);
 
+        createGridFragment(savedInstanceState);
+
         retrieveTokenAsync();
+
+
+
     }
 
-    private void createGridFragment() {
-        // Create a new grid Fragment to be placed in the activity layout
-        GridFragment gridFragment = new GridFragment();
+    private void createGridFragment(Bundle savedInstanceState) {
 
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, gridFragment, ConstantsFragments.TAG_GRID_FRAGMENT).
-                addToBackStack(null).commit();
-        getSupportFragmentManager().executePendingTransactions();//do it immediatley
+        if (savedInstanceState == null) {
+            // Create a new grid Fragment to be placed in the activity layout
+            gridFragment = new GridFragment();
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.fragment_container, gridFragment, ConstantsFragments.TAG_GRID_FRAGMENT).
+                    addToBackStack(null).commit();
+        } else {
+            gridFragment = (GridFragment) getSupportFragmentManager().findFragmentByTag(ConstantsFragments.TAG_GRID_FRAGMENT);
+        }
+
     }
 
 
@@ -204,7 +217,7 @@ public class MainActivity extends YelpBaseActivity {
                                     Log.d(TAG, businessesWithReviews.toString());
                                     BusinessesModel.getInstance().setBusinesses(businessesWithReviews);
                                     hideSpinner();
-                                    createGridFragment();
+                                    gridFragment.updateUI();
                                 }
 
                                 ;
